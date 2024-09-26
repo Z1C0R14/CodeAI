@@ -1,22 +1,55 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Simple Website</title>
-    <link rel="stylesheet" href="main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Imagens</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="light-theme">
-    <h1>Task List</h1>
-    <p id="msg">Current Task:</p>
-    <ul>
-        <li class="list">Add visual styles</li>
-        <li class="list">Add light and dark themes</li>
-        <li>Enable switching the theme</li>
-    </ul>
-    <div>
-        <button class="btn">Dark</button>
-    </div>
-    <script src="app.js"></script>
-    <noscript>You need to enable JavaScript to view the full site.</noscript>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="https://cdn.discordapp.com/attachments/816751889071865918/1288928782933164116/logo.png?ex=66f6f7f8&is=66f5a678&hm=d9a721b53cf682b0eddc0f2e494d04ad8d01a4b2e2d372cf6cfc33e62d97dfa0&" alt="Logo" class="logo-img">
+            </div>
+            <div class="menu-profile">
+                <ul class="menu">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Planos</a></li>
+                    <li><a href="#">Estudar</a></li>
+                </ul>
+                <div class="profile">
+                    <img src="https://via.placeholder.com/40" alt="Foto de Perfil" class="profile-pic">
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <div class="container">
+            <div class="input-section">
+                <h2>Digite algo para gerar uma imagem:</h2>
+                <textarea id="textInput" placeholder="Digite algo..."></textarea>
+                <button id="generateBtn">Gerar Imagem</button>
+                <div id="imageContainer"></div>
+            </div>
+
+            <div class="instructions-section">
+                <h2>Instruções:</h2>
+                <ul>
+                    <li>Digite uma palavra ou frase no campo de texto.</li>
+                    <li>Clique no botão "Gerar Imagem".</li>
+                    <li>Uma imagem será exibida ao lado com base no que você digitou.</li>
+                    <li>Você pode tentar diferentes palavras e ver as imagens geradas.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 Gerador de Imagens. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

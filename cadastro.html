@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro no Firebase</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+  <link rel="stylesheet" href="cadastro.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+          <h1>Cadastro de Usuário</h1>
+          <form id="signup-form">
+            <div class="input-group">
+              <label for="email">E-mail:</label>
+              <input type="email" id="email" required>
+            </div>
+    
+            <div class="input-group">
+              <label for="password">Senha:</label>
+              <input type="password" id="password" required>
+            </div>
+    
+            <button type="submit" class="btn-login">Cadastrar</button>
+          </form>
+    
+          <a href="loggin.html">fazer o Login</a>
+
+          <div class="divider">ou</div>
+    
+          <div class="google-login">
+            <button class="btn-google-login" id="google-login-btn">Entrar com Google</button>
+          </div>
+    
+          <p id="message"></p>
+        </div>
+      </div>
+    
+      <script src="cadastro.js"></script>
+</body>
+</html>

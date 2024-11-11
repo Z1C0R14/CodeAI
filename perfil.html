@@ -3,41 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Login</title>
-    <link rel="stylesheet" href="loggin.css">
-
-    <!-- Firebase App e Auth -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <title>Perfil do Usuário</title>
+    <link rel="stylesheet" href="perfil.css">
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-box">
-            <h1>Login</h1>
-            <form id="loginForm">
-                <div class="input-group">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" placeholder="Digite seu e-mail">
-                </div>
-                <div class="input-group">
-                    <label for="password">Senha</label>
-                    <input type="password" id="password" placeholder="Digite sua senha">
-                </div>
-                <button type="submit" class="btn-login">Entrar</button>
-            </form>
+    <div class="perfil-container">
+        <!-- Setinha de Voltar -->
 
-            <a href="cadastro.html">Fazer o cadastro</a>
+        <div class="voltar">
+            <a href="javascript:history.back()">
+                <img src="https://img.icons8.com/ios-filled/50/000000/long-arrow-left.png" alt="Voltar" class="seta-voltar">
+            </a>
+        </div>
 
-            <div class="divider">ou</div>
-
-            <div class="google-login">
-                <button id="googleLoginBtn" class="btn-google-login">Login com Google</button>
+        <div class="logo">
+                <img src="https://cdn.discordapp.com/attachments/958455829139456021/1305374022791331850/logo-preta.png?ex=6732cbcb&is=67317a4b&hm=31d1bf474cf2ac813db123d629738eeb643ece0baed33f73e4360ef42f136814&" alt="Logo">
             </div>
-            
+        <div class="perfil-imagem">
+            <img id="user-profile-pic" src="https://via.placeholder.com/120" alt="Imagem de Perfil">
+        </div>
+        <div class="perfil-info">
+            <h1 id="user-name">Nome do Usuário</h1>
+            <p id="user-email">Email do usuário</p>
+            <p id="user-plano">Plano: Grátis</p>
+            <button id="logout-link" class="btn-editar">Sair</button>
         </div>
     </div>
+
+    <!-- Scripts do Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
 
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
 
     <script>
         // Configuração do Firebase
@@ -53,32 +50,26 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        // Login com e-mail e senha
-        document.getElementById("loginForm").addEventListener("submit", (e) => {
-            e.preventDefault();
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            auth.signInWithEmailAndPassword(email, password)
-                .then(() => {
-                    window.location.href = "index.html"; // Redirecionar para a página inicial após o login
-                })
-                .catch((error) => {
-                    console.error("Erro no login:", error);
-                    alert("Erro no login. Verifique suas credenciais.");
-                });
+        // Verifica o status de autenticação
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Atualiza a página com as informações do usuário
+                document.getElementById("user-profile-pic").src = user.photoURL || "https://via.placeholder.com/120";
+                document.getElementById("user-name").textContent = user.displayName || "Usuário";
+                document.getElementById("user-email").textContent = user.email || "Email não disponível";
+            } else {
+                // Redireciona para a página de login se o usuário não estiver autenticado
+                window.location.href = "loggin.html";
+            }
         });
 
-        // Login com Google
-        document.getElementById("googleLoginBtn").addEventListener("click", () => {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    window.location.href = "index.html"; // Redirecionar para a página inicial após o login
-                })
-                .catch((error) => {
-                    console.error("Erro no login com Google:", error);
-                    alert("Erro no login com Google.");
-                });
+        // Função para fazer logout
+        document.getElementById("logout-link").addEventListener("click", () => {
+            auth.signOut().then(() => {
+                window.location.href = "loggin.html";
+            }).catch((error) => {
+                console.error("Erro ao fazer logout:", error);
+            });
         });
         const db = firebase.firestore(); // Inicialize o Firestore
 
@@ -126,6 +117,21 @@ document.getElementById("change-to-premium").addEventListener("click", () => {
         console.error("Erro ao mudar para o plano Premium:", error);
     });
 });
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        const userRef = db.collection("users").doc(user.uid);
+
+        // Obtém o plano do usuário e exibe
+        userRef.get().then((doc) => {
+            const plano = doc.data().plano;
+            document.getElementById("user-plano").textContent = plano === "premium" ? "Plano Premium" : (plano === "mensal" ? "Plano Mensal" : "Plano Grátis");
+        });
+    } else {
+        // Redireciona para a página de login se o usuário não estiver autenticado
+        window.location.href = "loggin.html";
+    }
+});
+
 
     </script>
 </body>

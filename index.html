@@ -5,21 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Imagens</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="https://cdn.discordapp.com/attachments/958455829139456021/1301890068201603163/logo-removebg-preview.png?ex=67261f1c&is=6724cd9c&hm=7f1eb647f7f3441f842a7ed96da8b9900d346ea36c37f6bb955870e8a2250216&" type="image/x-icon">
 </head>
 <body>
+    <div class="fundo">
     <header>
         <nav>
             <div class="logo">
-                <img src="https://cdn.discordapp.com/attachments/816751889071865918/1288928782933164116/logo.png?ex=66f6f7f8&is=66f5a678&hm=d9a721b53cf682b0eddc0f2e494d04ad8d01a4b2e2d372cf6cfc33e62d97dfa0&" alt="Logo" class="logo-img">
+                <img src="https://cdn.discordapp.com/attachments/958455829139456021/1301890068201603163/logo-removebg-preview.png?ex=67261f1c&is=6724cd9c&hm=7f1eb647f7f3441f842a7ed96da8b9900d346ea36c37f6bb955870e8a2250216&" alt="Logo" class="logo-img">
             </div>
             <div class="menu-profile">
                 <ul class="menu">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Planos</a></li>
-                    <li><a href="#">Estudar</a></li>
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="planos.html">Planos</a></li>
+                    <li><a href="index.html">Estudar</a></li>
                 </ul>
-                <div class="profile">
-                    <img src="https://via.placeholder.com/40" alt="Foto de Perfil" class="profile-pic">
+                <div class="profile dropdown">
+                    <img id="user-profile-pic" src="https://via.placeholder.com/40" alt="Foto de Perfil" class="profile-pic">
+                    <div class="dropdown-content">
+                        <a href="perfil.html" id="profile-link">Perfil</a>
+                        <a href="#" id="logout-link">Sair</a>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -44,12 +50,109 @@
                 </ul>
             </div>
         </div>
+        
     </main>
 
     <footer>
         <p>© 2024 Gerador de Imagens. Todos os direitos reservados.</p>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- Scripts do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+
+    <!-- Configuração e verificação de autenticação -->
+    <script>
+   const firebaseConfig = {
+            apiKey: "AIzaSyDqWNJi_U14J0gg_nEeu4GMKoEhH9RssXc",
+            authDomain: "codeai-6a4ff.firebaseapp.com",
+            projectId: "codeai-6a4ff",
+            storageBucket: "codeai-6a4ff.appspot.com",
+            messagingSenderId: "288742308321",
+            appId: "1:288742308321:web:4b6069d16cda2bcad67aa0",
+            measurementId: "G-JZE1W3K05K"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Função para fazer login com Google usando pop-up
+        function loginWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    const user = result.user;
+                    document.getElementById("user-profile-pic").src = user.photoURL || "https://via.placeholder.com/40";
+                    window.location.href = "home.html"; // Redirecionar para a página inicial
+                })
+                .catch((error) => {
+                    console.error("Erro no login com Google:", error);
+                });
+        }
+
+        // Verifica o status de autenticação
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById("user-profile-pic").src = user.photoURL || "https://via.placeholder.com/40";
+            } else {
+                window.location.href = "loggin.html";
+            }
+        });
+
+        // Função para fazer logout
+        document.getElementById("logout-link").addEventListener("click", () => {
+            auth.signOut().then(() => {
+                window.location.href = "loggin.html";
+            }).catch((error) => {
+                console.error("Erro ao fazer logout:", error);
+            });
+        });
+
+
+        const API_KEY = 'uC2espeKwTtgQTUNuMwOcQgzL9u6kmQoNiVVab6CXxHV1CzMK0J6X4Qq';
+
+document.getElementById('generateBtn').addEventListener('click', function() {
+    const inputText = document.getElementById('textInput').value;
+
+    if (inputText.trim() === '') {
+        alert('Por favor, digite algo no campo de texto.');
+        return;
+    }
+
+    // URL para a API de pesquisa de imagens da Pexels
+    const apiUrl = `https://api.pexels.com/v1/search?query=${encodeURIComponent(inputText)}&per_page=1`;
+
+    fetch(apiUrl, {
+        headers: {
+            Authorization: API_KEY
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const imageContainer = document.getElementById('imageContainer');
+        imageContainer.innerHTML = ''; // Limpa qualquer imagem anterior
+
+        // Verifica se há resultados de imagens
+        if (data.photos && data.photos.length > 0) {
+            const imageUrl = data.photos[0].src.medium;
+            
+            // Cria e exibe a imagem na página
+            const imgElement = document.createElement('img');
+            imgElement.src = imageUrl;
+            imgElement.alt = 'Imagem gerada';
+            imgElement.style.width = '100%';  // Ajuste de tamanho para largura total
+
+            imageContainer.appendChild(imgElement);
+        } else {
+            imageContainer.innerHTML = '<p>Nenhuma imagem encontrada. Tente outra palavra-chave.</p>';
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao gerar imagem:', error);
+        alert('Ocorreu um erro ao gerar a imagem. Tente novamente mais tarde.');
+    });
+});
+    </script>
+    <script href="loggin.js"></script>
+</div>
 </body>
 </html>

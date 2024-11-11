@@ -45,9 +45,7 @@ nav {
     padding: 0 20px;
     margin-right: 500px;
 }
-.fundo{
-    background-color: #2f2f2f;
-}
+
 .logo {
     flex: 1;
     margin-right: 1080px;
@@ -96,7 +94,6 @@ ul.menu li a:hover {
     border: 2px solid #fff;
 }
 
-
 .dropdown {
     position: relative;
     display: inline-block;
@@ -126,55 +123,64 @@ ul.menu li a:hover {
     display: block;
 }
 
-main {
+
+
+.plan-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
+    justify-content: space-around;
+    margin: 20px auto; /* Centraliza o container */
+    max-width: 1200px; /* Define uma largura máxima */
+    width: 90%; /* Largura relativa para que fique responsiva */
+    padding-top: 120px;
 }
 
-.container {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-    background-color: #fff;
-    border: 1px solid #ddd;
+.plan {
+    background-color: white;
     border-radius: 8px;
-    box-shadow: rgba(131, 131, 140, 0.432) 0px 7px 29px 0px;
-}
-
-.input-section, .instructions-section {
-    width: 45%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    text-align: center;
+    width: 30%; /* Ajusta a largura dos planos */
+    min-height: 350px; /* Define uma altura mínima para os planos */
 }
 
-textarea {
-    width: 100%;
-    height: 100px;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+.plan h2 {
     margin-bottom: 10px;
-    font-size: 16px;
+    font-size: 24px; /* Aumenta o tamanho do título */
 }
 
-button {
-    padding: 10px 20px;
+.plan p {
+    margin-bottom: 15px;
+    font-size: 18px; /* Aumenta o tamanho da descrição */
+}
+
+.plan ul {
+    list-style-type: none;
+    margin-bottom: 15px;
+    padding: 0; /* Remove padding da lista */
+    text-align: left; /* Alinha o texto à esquerda */
+}
+
+.plan ul li {
+    margin: 5px 0; /* Adiciona espaçamento entre os itens da lista */
+}
+
+.plan button {
     background-color: #28a745;
-    color: #fff;
+    color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 4px;
+    padding: 12px 24px; /* Aumenta o tamanho do botão */
     cursor: pointer;
-    font-size: 16px;
+    font-size: 16px; /* Aumenta o tamanho do texto do botão */
 }
 
-button:hover {
+.plan button:hover {
     background-color: #218838;
 }
-
-.instructions-section ul {
-    list-style-type: none;
-    line-height: 1.8;
+ 
+.fundo{
+    background-color: #2f2f2f;
 }
 
 footer {
@@ -186,37 +192,3 @@ footer {
     width: 100%;
     bottom: 0;
 }
-
-#imageContainer {
-    margin-top: 20px;
-    text-align: center;
-}
-
-/* CSS HOME /*
-/*background menu*/ /*POSITION STATIC serve ou nao serev*/
-main .home {
-    background-color: #181818;
-    border: solid 1px #e9dbdb;
-    border-radius: 20px;
-    pointer-events: none;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-    width: 100vh;
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  main .home img {
-    height: 100px;
-  }
-  
-  main .home h1 {
-    color: white;
-    font-family: 'Sora', sans-serif;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    display: inline-block;
-  }

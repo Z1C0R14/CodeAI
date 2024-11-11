@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planos de Assinatura</title>
+    <link rel="stylesheet" href="planos.css">
+</head>
+<body>
+    <div class="fundo">
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="https://cdn.discordapp.com/attachments/958455829139456021/1301890068201603163/logo-removebg-preview.png?ex=67261f1c&is=6724cd9c&hm=7f1eb647f7f3441f842a7ed96da8b9900d346ea36c37f6bb955870e8a2250216&" alt="Logo" class="logo-img">
+            </div>
+            <div class="menu-profile">
+                <ul class="menu">
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="planos.html">Planos</a></li>
+                    <li><a href="index.html">Estudar</a></li>
+                </ul>
+                <div class="profile dropdown">
+                    <!-- Foto de perfil do usuário logado -->
+                    <img id="user-profile-pic" src="https://via.placeholder.com/40" alt="Foto de Perfil" class="profile-pic">
+                    <div class="dropdown-content">
+                        <a href="perfil.html" id="profile-link">Perfil</a>
+                        <a href="#" id="logout-link">Sair</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="plan-container">
+            <div class="plan free">
+                <h2>Plano Grátis</h2>
+                <p>Perfeito para iniciantes.</p>
+                <p><strong>Preço: Grátis</strong></p>
+                <ul>
+                    <li>Acesso limitado a funcionalidades</li>
+                    <li>Suporte básico</li>
+                </ul>
+                <button>Selecionar</button>
+            </div>
+
+            <!-- Plano Mensal -->
+        <div class="plan monthly">
+            <h2>Plano Mensal</h2>
+            <p>Ideal para usuários regulares.</p>
+            <p><strong>Preço: R$ 29,99/mês</strong></p>
+            <ul>
+                <li>Acesso completo a funcionalidades</li>
+                <li>Suporte prioritário</li>
+            </ul>
+            <button id="plan-monthly">Selecionar</button>
+        </div>
+
+        <!-- Plano Anual -->
+        <div class="plan annual">
+            <h2>Plano Anual</h2>
+            <p>Para os que desejam economia.</p>
+            <p><strong>Preço: R$ 299,99/ano</strong></p>
+            <ul>
+                <li>Acesso completo a funcionalidades</li>
+                <li>Suporte prioritário</li>
+                <li>2 meses grátis</li>
+            </ul>
+            <button id="plan-annual">Selecionar</button>
+        </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>© 2024 Gerador de Imagens. Todos os direitos reservados.</p>
+    </footer>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+
+    <!-- Configuração e verificação de autenticação -->
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqWNJi_U14J0gg_nEeu4GMKoEhH9RssXc",
+            authDomain: "codeai-6a4ff.firebaseapp.com",
+            projectId: "codeai-6a4ff",
+            storageBucket: "codeai-6a4ff.appspot.com",
+            messagingSenderId: "288742308321",
+            appId: "1:288742308321:web:4b6069d16cda2bcad67aa0",
+            measurementId: "G-JZE1W3K05K"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Verifica o status de autenticação
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Exibe a foto do usuário logado
+                document.getElementById("user-profile-pic").src = user.photoURL || "https://via.placeholder.com/40";
+            } else {
+                // Redireciona para a página de login se não estiver logado
+                window.location.href = "loggin.html";
+            }
+        });
+
+        // Função para fazer logout
+        document.getElementById("logout-link").addEventListener("click", () => {
+            auth.signOut().then(() => {
+                window.location.href = "loggin.html"; // Redireciona para a página de login após o logout
+            }).catch((error) => {
+                console.error("Erro ao fazer logout:", error);
+            });
+        });
+        // Adicionar configuração do Firestore
+const db = firebase.firestore();  // Inicialize o Firestore
+
+// Quando o usuário estiver logado, ele pode atualizar o plano
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        // Ação de mudar para o plano mensal
+        document.getElementById("plan-monthly").addEventListener("click", () => {
+            updateUserPlan(user, "mensal");
+        });
+
+        // Ação de mudar para o plano anual
+        document.getElementById("plan-annual").addEventListener("click", () => {
+            updateUserPlan(user, "anual");
+        });
+    } else {
+        // Redireciona para a página de login se não estiver logado
+        window.location.href = "loggin.html";
+    }
+});
+
+// Função para atualizar o plano do usuário no Firestore
+function updateUserPlan(user, plano) {
+    const userRef = db.collection("users").doc(user.uid);
+    
+    // Atualiza o campo 'plano' no Firestore
+    userRef.update({
+        plano: plano
+    }).then(() => {
+        alert("Plano atualizado para " + plano);
+        // Você pode redirecionar para uma página de confirmação ou para o perfil
+        window.location.href = "perfil.html";  // Redireciona para a página de perfil para visualizar o plano atualizado
+    }).catch((error) => {
+        console.error("Erro ao atualizar o plano:", error);
+    });
+}
+auth.createUserWithEmailAndPassword(email, senha)
+    .then((userCredential) => {
+        const user = userCredential.user;
+
+        // Salva o plano "grátis" para o usuário
+        db.collection("users").doc(user.uid).set({
+            plano: "grátis",  // Plano inicial
+            nome: user.displayName || "Usuário",
+            email: user.email,
+            fotoURL: user.photoURL || "https://via.placeholder.com/120"
+        }).then(() => {
+            console.log("Plano do usuário configurado como 'grátis'");
+        }).catch((error) => {
+            console.error("Erro ao salvar o plano:", error);
+        });
+    })
+    .catch((error) => {
+        console.error("Erro ao criar usuário:", error);
+    });
+    auth.onAuthStateChanged((user) => {
+    if (user) {
+        const userRef = db.collection("users").doc(user.uid);
+
+        // Obtém o plano do usuário e exibe
+        userRef.get().then((doc) => {
+            const plano = doc.data().plano;
+            document.getElementById("user-plano").textContent = plano === "premium" ? "Plano Premium" : (plano === "mensal" ? "Plano Mensal" : "Plano Grátis");
+        });
+    } else {
+        window.location.href = "loggin.html";  // Redireciona para a página de login
+    }
+});
+    </script>
+    </div>
+</body>
+</html>

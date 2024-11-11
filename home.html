@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+    <title> Home </title>
+</head>
+<body>
+    <div class="fundo">
+  <header>
+    <nav>
+        <div class="logo">
+            <img src="https://cdn.discordapp.com/attachments/958455829139456021/1301890068201603163/logo-removebg-preview.png?ex=67261f1c&is=6724cd9c&hm=7f1eb647f7f3441f842a7ed96da8b9900d346ea36c37f6bb955870e8a2250216&" alt="Logo" class="logo-img">
+        </div>
+        <div class="menu-profile">
+            <ul class="menu">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="planos.html">Planos</a></li>
+                <li><a href="index.html">Estudar</a></li>
+            </ul>
+            <div class="profile dropdown">
+                <img id="user-profile-pic" src="https://via.placeholder.com/40" alt="Foto de Perfil" class="profile-pic">
+                <div class="dropdown-content">
+                    <a href="perfil.html" id="profile-link">Perfil</a>
+                    <a href="#" id="logout-link">Sair</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<main>
+    <div class="home">
+        <img src="/img/luz.png" alt="...">
+            <h1>
+                Que tal começar a aprender as possibilidades da IA de forma gratuita?
+            </h1>
+    </div>
+</main>
+   
+
+
+
+
+    <footer>
+      <p>© 2024 Gerador de Imagens. Todos os direitos reservados.</p>
+  </footer>
+    <script src="script.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+    <script>
+       const firebaseConfig = {
+            apiKey: "AIzaSyDqWNJi_U14J0gg_nEeu4GMKoEhH9RssXc",
+            authDomain: "codeai-6a4ff.firebaseapp.com",
+            projectId: "codeai-6a4ff",
+            storageBucket: "codeai-6a4ff.appspot.com",
+            messagingSenderId: "288742308321",
+            appId: "1:288742308321:web:4b6069d16cda2bcad67aa0",
+            measurementId: "G-JZE1W3K05K"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Função para fazer login com Google usando pop-up
+        function loginWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    const user = result.user;
+                    document.getElementById("user-profile-pic").src = user.photoURL || "https://via.placeholder.com/40";
+                    window.location.href = "home.html"; // Redirecionar para a página inicial
+                })
+                .catch((error) => {
+                    console.error("Erro no login com Google:", error);
+                });
+        }
+
+        // Verifica o status de autenticação
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById("user-profile-pic").src = user.photoURL || "https://via.placeholder.com/40";
+            } else {
+                window.location.href = "loggin.html";
+            }
+        });
+
+        // Função para fazer logout
+        document.getElementById("logout-link").addEventListener("click", () => {
+            auth.signOut().then(() => {
+                window.location.href = "loggin.html";
+            }).catch((error) => {
+                console.error("Erro ao fazer logout:", error);
+            });
+        });
+
+    </script>
+    </div>
+</body>
+</html>

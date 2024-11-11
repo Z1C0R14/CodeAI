@@ -9,23 +9,40 @@ const firebaseConfig = {
     measurementId: "G-JZE1W3K05K"
   };
 
-// Inicializar Firebase
+// Inicialize o Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-// Função de login com Google
-document.getElementById('googleLoginBtn').addEventListener('click', function() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    
-    auth.signInWithPopup(provider)
-        .then((result) => {
-            const user = result.user;
-            console.log('Usuário logado:', user);
-            alert(`Bem-vindo ${user.displayName}!`);
-            // Redirecionar para dashboard
-            window.location.href = 'dashboard.html';
+// Login com email e senha
+document.getElementById('loginBtn').addEventListener('click', function() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const errorMessage = document.getElementById('error-message');
+
+    auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // Login bem-sucedido
+            window.location.href = 'index.html';  // Redireciona para a página inicial
         })
         .catch((error) => {
-            console.error('Erro ao fazer login:', error);
+            // Mostra mensagem de erro em caso de falha no login
+            errorMessage.textContent = "Credenciais incorretas. Tente novamente.";
+            console.error("Erro de autenticação:", error);
+        });
+});
+
+// Login com Google
+document.getElementById('googleLoginBtn').addEventListener('click', function() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    auth.signInWithPopup(provider)
+        .then((result) => {
+            // Login bem-sucedido
+            window.location.href = 'index.html';  // Redireciona para a página inicial
+        })
+        .catch((error) => {
+            // Exibe uma mensagem de erro em caso de falha no login com Google
+            console.error("Erro ao fazer login com Google:", error);
+            document.getElementById('error-message').textContent = "Erro ao fazer login com Google. Tente novamente.";
         });
 });
